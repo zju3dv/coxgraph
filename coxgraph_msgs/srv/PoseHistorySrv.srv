@@ -1,0 +1,5 @@
+#request
+string file_path
+---
+#response
+coxgraph_msgs/PoseHistory pose_history

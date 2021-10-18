@@ -1,0 +1,7 @@
+#request
+time timestamp
+---
+#response
+coxgraph_msgs/ClientSubmap submap
+geometry_msgs/Transform transform
+time pub_time

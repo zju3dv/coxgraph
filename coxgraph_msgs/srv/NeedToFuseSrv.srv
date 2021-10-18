@@ -1,0 +1,5 @@
+int8 cid_a
+int8 cid_b
+time time
+---
+bool need_to_fuse

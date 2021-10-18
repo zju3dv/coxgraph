@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+        <arg name="id" default="0" />
+        <arg name="bag_file" default="/home/lxy/Datasets/euroc/MH_01_easy.bag" />
+        <arg name="clock" default="false" />
+        <arg name="play_speed" default="1" />
+        <arg name="skip_seconds" default="0" />
+        <arg name="use_vins" default="true" />
+        <arg name="bag_ripped" default="false" />
+
+        <include if="$(arg use_vins)" file="$(find coxgraph)/launch/utils/vins_sim.launch">
+                <arg name="mav_name" default="firefly" />
+                <arg name="id" value="$(arg id)" />
+                <arg name="start_initializer" value="false" />
+                <arg name="config_path" value="$(find coxgraph)/config/euroc/euroc_config_$(arg id).yaml" />
+        </include>
+
+        <!-- Stereo image rectification. -->
+        <arg name="camera_calibration_file_path" default="$(find coxgraph)/config/euroc/euroc_camchain.yaml" />
+        <node unless="$(arg bag_ripped)" name="dense_stereo_node_$(arg id)" pkg="image_undistort" type="dense_stereo_node" output="screen">
+                <param name="input_camera_info_from_ros_params" value="true" />
+                <param name="first_camera_namespace" value="cam0" />
+                <param name="second_camera_namespace" value="cam1" />
+                <param name="scale" value="1.0" />
+                <param name="process_every_nth_frame" value="1" />
+                <param name="use_sgbm" value="true" />
+
+                <rosparam file="$(arg camera_calibration_file_path)" />
+                <param name="cam0/rostopic" value="/cam0_$(arg id)/image_raw" />
+                <param name="cam1/rostopic" value="/cam1_$(arg id)/image_raw" />
+                <param name="rename_input_frame" value="true" />
+                <param name="first_input_frame" value="cam_$(arg id)" />
+                <param name="second_input_frame" value="cam_$(arg id)" />
+                <param name="first_output_frame" value="first_camera_rect_$(arg id)" />
+                <param name="second_output_frame" value="second_camera_rect_$(arg id)" />
+
+                <remap from="raw/first/image" to="/cam0_$(arg id)/image_raw" />
+                <remap from="raw/second/image" to="/cam1_$(arg id)/image_raw" />
+
+                <remap from="rect/first/image" to="/rect_$(arg id)/first/image" />
+                <remap from="rect/second/image" to="/rect_$(arg id)/second/image" />
+
+                <remap from="rect/first/camera_info" to="rect_$(arg id)/first/camera_info" />
+                <remap from="rect/second/camera_info" to="rect_$(arg id)/second/camera_info" />
+
+                <remap from="~pointcloud" to="/pointcloud_$(arg id)" />
+        </node>
+
+        <group unless="$(arg bag_ripped)">
+                <node if="$(arg clock)" pkg="rosbag" type="play" name="player_$(arg id)" args="$(arg bag_file) -d 10 -r $(arg play_speed) -s $(arg skip_seconds) --clock /cam0/image_raw:=/cam0_$(arg id)/image_raw /cam1/image_raw:=/cam1_$(arg id)/image_raw imu0:=/imu0_$(arg id)" />
+                <node unless="$(arg clock)" pkg="rosbag" type="play" name="player_$(arg id)" args="$(arg bag_file) -d 10 -r $(arg play_speed) -s $(arg skip_seconds) /cam0/image_raw:=/cam0_$(arg id)/image_raw /cam1/image_raw:=/cam1_$(arg id)/image_raw imu0:=/imu0_$(arg id)" />
+        </group>
+
+        <group if="$(arg bag_ripped)">
+                <node if="$(arg clock)" pkg="rosbag" type="play" name="player_$(arg id)" args="$(arg bag_file) -d 10 -r $(arg play_speed) -s $(arg skip_seconds) --clock" />
+                <node unless="$(arg clock)" pkg="rosbag" type="play" name="player_$(arg id)" args="$(arg bag_file) -d 10 -r $(arg play_speed) -s $(arg skip_seconds)" />
+        </group>
+
+
+</launch>

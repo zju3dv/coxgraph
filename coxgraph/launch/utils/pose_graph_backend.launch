@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="num_agents"/>
+  <arg name="mav_name" default="firefly"/>
+  <arg name="logging" default="true"/>
+  <arg name="sensor" default="sim_visensor"/>
+
+  <!-- Debug -->
+  <arg name="launch_prefix" default="xterm -e"/>
+  <!-- xterm -fs 60 -e gdb args -->
+
+  <!-- Pose-Graph Node -->
+  <node name="pose_graph_backend" pkg="pose_graph_backend" type="pose_graph_node" output="screen" launch-prefix="$(arg launch_prefix)" args="-alsologtostderr">
+    <remap from="~map_fusion" to="/coxgraph/map_fusion_in"/>
+    <!--   <remap from="~loop_closure_out_0" to="/coxgraph/coxgraph_client_0/loop_closure_in"/>
+    <remap from="~loop_closure_out_1" to="/coxgraph/coxgraph_client_1/loop_closure_in"/>
+    <remap from="~loop_closure_out_2" to="/coxgraph/coxgraph_client_2/loop_closure_in"/>
+    -->
+    <remap from="tf" to="tf_old"/>
+    <param name="bow_voc" value="$(find pose_graph_backend)/conf/briskOKVIS_k10_L6_voc_v1.yml.gz"/>
+    <param name="num_agents" value="$(arg num_agents)" />
+
+    <param name="cam_config0" value="$(find coxgraph)/config/ncamera_$(arg sensor).yaml"/>
+    <param name="cam_config1" value="$(find coxgraph)/config/ncamera_$(arg sensor).yaml"/>
+    <param name="cam_config2" value="$(find coxgraph)/config/ncamera_$(arg sensor).yaml"/>
+    <param name="cam_config3" value="$(find coxgraph)/config/ncamera_$(arg sensor).yaml"/>
+
+    <rosparam param="gps_reference0">[47.4503488, 8.6815056, 0.0]</rosparam>
+    <rosparam param="gps_offset0"> [0.0, 0.0, 0.0]</rosparam>
+
+    <rosparam param="gps_reference1">[47.4503488, 8.6815056, 0.0]</rosparam>
+    <rosparam param="gps_offset1"> [0.0, 0.0, 0.0]</rosparam>
+
+    <rosparam param="gps_reference2">[47.4503488, 8.6815056, 0.0]</rosparam>
+    <rosparam param="gps_offset2"> [0.0, 0.0, 0.0]</rosparam>
+
+    <rosparam param="gps_reference3">[47.4503488, 8.6815056, 0.0]</rosparam>
+    <rosparam param="gps_offset3"> [0.0, 0.0, 0.0]</rosparam>
+
+    <!-- SYSTEM PERFORMANCE PARAMETERS -->
+    <param name="gps_align_num_corr" value="6"/>
+    <param name="gps_align_cov_max" value="0.04"/>
+    <param name="rel_pose_corr_min" value="12"/>
+    <param name="rel_pose_outlier_norm_min" value="0.95"/>
+    <param name="local_opt_window_size" value="8"/>
+
+    <param name="loop_candidate_min_score" value="0.03"/>
+    <param name="max_loop_candidates" value="3"/>
+    <param name="loop_image_min_matches" value="50"/>
+    <param name="loop_detect_sac_thresh" value="25"/>
+    <param name="loop_detect_sac_max_iter" value="200"/>
+    <param name="loop_detect_min_sac_inliers" value="9"/>
+    <param name="loop_detect_min_sac_inv_inliers" value="9"/>
+    <param name="loop_detect_min_pose_inliers" value="9"/>
+
+    <param name="loop_detect_reset_time" value="6"/>
+    <param name="loop_detect_skip_kf" value="1"/>
+    <!-- set to 1 for process every kf -->
+
+    <param name="information_odom_drift_yaw" value="20000"/>
+    <param name="information_odom_drift_p" value="5000"/>
+    <param name="information_odom_map_yaw" value="200"/>
+    <param name="information_odom_map_p" value="10"/>
+    <param name="information_odom_edges_yaw" value="10000"/>
+    <param name="information_odom_edges_p" value="10000"/>
+    <param name="information_loop_edges_yaw" value="2"/>
+    <param name="information_loop_edges_p" value="1"/>
+
+    <param name="ignore_gps_altitude" value="false"/>
+    <param name="simulation" value="true"/>
+    <param name="logging" value="$(arg logging)"/>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+    <!-- SYSTEM TOPIC REMAPPING -->
+    <param name="gps_active_0" value="false"/>
+    <remap from="/keyframe0" to="/firefly_0/pose_graph_0/vins_keyframe" />
+    <remap from="/odometry0" to="/$(arg mav_name)_0/vins_estimator_0/odometry" />
+
+    <param name="gps_active_1" value="false"/>
+    <remap from="/keyframe1" to="/firefly_1/pose_graph_1/vins_keyframe" />
+    <remap from="/odometry1" to="/$(arg mav_name)_1/vins_estimator_1/odometry" />
+
+    <param name="gps_active_2" value="false"/>
+    <remap from="/keyframe2" to="/firefly_2/pose_graph_2/vins_keyframe" />
+    <remap from="/odometry2" to="/$(arg mav_name)_2/vins_estimator_2/odometry" />
+
+    <param name="gps_active_3" value="false"/>
+    <remap from="/keyframe3" to="/firefly_3/pose_graph_3/vins_keyframe" />
+    <remap from="/odometry3" to="/$(arg mav_name)_3/vins_estimator_3/odometry" />
+
+    <!-- coxgraph mod params -->
+    <param name="need_to_fuse_srv_name" value="/coxgraph/coxgraph_server_node/need_to_fuse"/>
+    <param name="trajectory_path" value="/workspaces/voxgraph_melodic_ws/eval/traj" />
+  </node>
+
+</launch>

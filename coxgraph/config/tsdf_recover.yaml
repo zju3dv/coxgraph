@@ -1,0 +1,15 @@
+verbose: false
+tsdf_voxel_size: 0.10
+truncation_distance: 0.30
+max_ray_length_m: 100
+min_ray_length_m: 0
+method: "fast"
+sensor_horizontal_resolution: 1280
+sensor_vertical_resolution: 960
+sensor_vertical_field_of_view_degrees: 360
+integrator_threads: 8
+use_const_weight: true
+publish_maps_every_n_sec: 0.0
+publish_map_with_trajectory: true
+world_frame: "odom_0"
+interpolate_voxel_size: 0.01

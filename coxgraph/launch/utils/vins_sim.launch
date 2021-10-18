@@ -1,0 +1,50 @@
+<launch>
+  <!-- Parameters -->
+  <arg name="mav_name" />
+  <arg name="id"    default = "0"/>
+  <arg name="config_path" default = "$(find coxgraph)/config/vins/vins_sim_agent_$(arg id).yaml" />
+  <arg name="vins_path"   default = "$(find feature_tracker)/../config/../" />
+
+  <arg name="start_initializer" default="true"/>
+  <arg name="enable_gazebo_tf" default="true"/>
+  <arg name="odom_topic" default="/$(arg mav_name)_$(arg id)/repub/odometry" unless="$(arg enable_gazebo_tf)" />
+  <arg name="odom_topic" default="/$(arg mav_name)_$(arg id)/ground_truth/odometry" if="$(arg enable_gazebo_tf)"/>
+
+  <group ns="$(arg mav_name)_$(arg id)">
+    <!-- Feature tracker -->
+    <node name="feature_tracker_$(arg id)" pkg="feature_tracker" type="feature_tracker" output="log">
+      <param name="config_file" type="string" value="$(arg config_path)" />
+      <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <!-- Estimator -->
+    <node name="vins_estimator_$(arg id)" pkg="vins_estimator" type="vins_estimator" output="log">
+      <param name="config_file" type="string" value="$(arg config_path)" />
+      <param name="vins_folder" type="string" value="$(arg vins_path)" />
+      <param name="origin_frame_name" type="string" value="odom_$(arg id)" />
+      <param name="camera_frame_name" type="string" value="cam_$(arg id)" />
+      <param name="imu_frame_name" type="string" value="imu_$(arg id)" />
+
+      <remap from="vins_estimator_$(arg id)/features" to="feature_tracker_$(arg id)/feature" />
+      <remap from="vins_estimator_$(arg id)/feature_restart" to="feature_tracker_$(arg id)/restart" />
+
+      <param name="toggle_mapping_srv_name" value="/coxgraph/tsdf_client_$(arg id)/toggle_mapping"/>
+    </node>
+
+    <!-- Pose Graph -->
+    <node name="pose_graph_$(arg id)" pkg="pose_graph" type="pose_graph" output="screen" >
+      <remap from="~loop_closure_out" to="/coxgraph/coxgraph_client_$(arg id)/loop_closure_in"/>
+      <param name="config_file" type="string" value="$(arg config_path)" />
+      <param name="visualization_shift_x" type="int" value="0" />
+      <param name="visualization_shift_y" type="int" value="0" />
+      <param name="skip_cnt" type="int" value="0" />
+      <param name="skip_dis" type="double" value="0" />
+      <param name="num_odom_connections" type="int" value="5"/>
+      <param name="num_agents" value="-1"/>
+
+      <remap from="pose_graph_$(arg id)/keyframe_pose" to="vins_estimator_$(arg id)/keyframe_pose" />
+      <remap from="pose_graph_$(arg id)/keyframe_point" to="vins_estimator_$(arg id)/keyframe_point" />
+    </node>
+
+  </group>
+</launch>

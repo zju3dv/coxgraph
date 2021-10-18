@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+        <param name="use_sim_time" value="true" />
+
+        <arg name="bag_name" default="V1_03_difficult.bag" />
+        <arg name="bag_file" default="/home/lxy/Datasets/euroc/$(arg bag_name)" />
+        <arg name="id" default="2" />
+
+        <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+                <arg name="bag_file" value="$(arg bag_file)" />
+                <arg name="clock" default="true" />
+                <arg name="id" default="$(arg id)" />
+                <arg name="use_vins" default="false" />
+        </include>
+
+        <node name="recorder" pkg="rosbag" type="record" output="screen" args="-O /home/lxy/Datasets_ssd/euroc/$(arg bag_name).data.bag /cam0_$(arg id)/image_raw /cam1_$(arg id)/image_raw /imu0_$(arg id) /pointcloud_$(arg id) /tf /clock" />
+</launch>

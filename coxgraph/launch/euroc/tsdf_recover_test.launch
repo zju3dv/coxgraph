@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="use_sim_time" value="false" />
+
+  <arg name="bag_file0" default="/home/lxy/Datasets/euroc/MH_01_easy.bag"/>
+  <arg name="bag_file1" default="/home/lxy/Datasets/euroc/MH_02_easy.bag"/>
+  <arg name="bag_file2" default="/home/lxy/Datasets/euroc/MH_03_medium.bag"/>
+  <arg name="tw_voxblox_config_file" default="$(find coxgraph)/config/tsdf_server_euroc.yaml"/>
+  <arg name="tsdf_voxel_size" default="0.10"/>
+  <arg name="truncation_distance" default="0.30"/>
+
+  <arg name="evaluate" default="true"/>
+
+  <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+    <arg name="id" value="0"/>
+    <arg name="clock" value="false"/>
+    <arg name="play_speed" value="1.0"/>
+    <arg name="bag_file" value="$(arg bag_file0)"/>
+  </include>
+
+  <include file="$(find coxgraph)/launch/firefly/coxgraph_client.launch">
+    <arg name="id" value="0"/>
+    <arg name="pointcloud_topic" default="/pointcloud_0"/>
+    <arg name="world_frame_suffix" default="odom"/>
+    <arg name="tw_voxblox_config_file" default="$(arg tw_voxblox_config_file)"/>
+    <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)"/>
+    <arg name="truncation_distance" value="$(arg truncation_distance)"/>
+    <arg name="debug_tsdf" default="false"/>
+  </include>
+
+  <group ns="coxgraph">
+    <arg name="debug" default="false"/>
+    <!-- <arg unless="$(arg debug)" name="launch_prefix" value="xterm -e" /> -->
+    <arg unless="$(arg debug)" name="launch_prefix" value="" />
+    <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb -ex run --args" />
+    <node pkg="coxgraph_mod" type="tsdf_recover_node" name="tsdf_recover_node" output="screen" args="-alsologtostderr" launch-prefix="$(arg launch_prefix)">
+      <remap from="submap_poses" to="coxgraph_client_0/submap_poses"/>
+      <remap from="submap_mesh_with_traj" to="coxgraph_client_0/submap_mesh_with_traj"/>
+      <param name="publish_tsdf_map" value="true" />
+      <param name="publish_slices" value="true" />
+      <param name="publish_pointclouds" value="true" />
+      <param name="publish_traversable" value="true"/>
+      <param name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)"/>
+      <param name="truncation_distance" value="$(arg truncation_distance)"/>
+      <param name="world_frame" value="odom_0"/>
+      <param name="method" value="projective"/>
+      <param name="sensor_horizontal_resolution" value="1280"/>
+      <param name="sensor_vertical_resolution" value="960"/>
+      <param name="sensor_vertical_field_of_view_degrees" value="360"/>
+      <param name="max_ray_length_m" value="10"/>
+      <param name="min_ray_length_m" value="0.3"/>
+      <param name="use_const_weight" value="true"/>
+      <param name="use_tf_transforms" value="true"/>
+      <param name="fov_horizontal_degree" value="45"/>
+      <param name="fov_vertical_degree" value="60"/>
+      <param name="interpolate_ratio" value="1"/>
+    </node>
+  </group>
+
+</launch>
