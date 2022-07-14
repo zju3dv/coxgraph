@@ -47,17 +47,15 @@ You can download the pdf from [here](http://www.cad.zju.edu.cn/home/gfzhang/pape
         catkin config --merge-devel
         catkin config -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
 
-3. Clone the repository and dependencies:
+3. Start building:
 
-        cd src
-        git clone git@github.com:zju3dv/coxgraph.git
-        wstool init
-        wstool merge coxgraph/coxgraph_ssh.rosinstall
-        wstool update
+        catkin build coxgraph vins_client_server pose_graph_backend image_undistort
 
-4. Start building:
-
-        catkin build coxgraph vins_client_server pose_graph_backend
+### Run
+        roslaunch coxgraph run_experiment_euroc.launch 
+        roslaunch coxgraph coxgraph_rviz.launch
+	rosservice call /coxgraph/coxgraph_server_node/get_final_global_mesh "filepath=<result_dir>"
+        (you need to wait to save the mesh)
 
 ### SLAM Frontend Selection
 
