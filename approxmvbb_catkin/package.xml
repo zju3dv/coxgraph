@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>approxmvbb_catkin</name>
+  <version>2.1.1</version>
+  <description>approxmvbb_catkin</description>
+  <maintainer email="tonci.novkovic@mavt.ethz.ch">Tonci Novkovic</maintainer>
+
+  <license>New BSD</license>
+
+  <author>Tonci Novkovic</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+  <depend>eigen_catkin</depend>
+</package>

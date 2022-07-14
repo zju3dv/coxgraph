@@ -1,0 +1,16 @@
+bin
+build 
+lib
+.cproject
+.project
+*~
+#*
+bin
+build
+lib
+*.o
+*.so
+*.pyc
+.project
+.cproject
+.pydevproject

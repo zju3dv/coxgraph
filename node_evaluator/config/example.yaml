@@ -1,0 +1,9 @@
+node_names: ["listener", "talker"]
+node_eval_mode:  [["cpu","mem"], ["cpu","mem"]]
+
+topic_eval_mode: [["topic_bw"]]
+topic_names: ["/chatter"]
+
+sys_eval_mode: ["sys_bw"]
+
+plot_dir: "/workspaces/voxgraph_melodic_ws/eval/node_evaluator"

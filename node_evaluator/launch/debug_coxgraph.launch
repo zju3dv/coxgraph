@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find node_evaluator)/launch/evaluate.launch">
+    <arg name="config_file" value="$(find coxgraph)/config/evaluation_config.yaml"/>
+    <arg name="debug" value="false"/>
+    <arg name="record_bag" value="false"/>
+  </include>
+
+</launch>

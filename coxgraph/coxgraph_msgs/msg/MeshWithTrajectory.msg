@@ -1,0 +1,2 @@
+voxblox_msgs/MultiMesh mesh
+nav_msgs/Path trajectory

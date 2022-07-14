@@ -1,0 +1,12 @@
+<launch>
+  <arg name="bag_path" />
+    
+  <node pkg="rosbag" type="play" name="player_0" output="screen" args="$(arg bag_path) -s 0.0" > 
+    <remap from="/sepp/cam0/image_raw" to="/sepp0/cam0/image_raw"/>
+    <remap from="/sepp/cam2/image_raw" to="/sepp0/cam2/image_raw"/>
+    <remap from="/sepp/imu0" to="/sepp0/imu0"/>
+    <remap from="/sepp/gps" to="/sepp0/gps"/>
+  </node>
+</launch>
+
+

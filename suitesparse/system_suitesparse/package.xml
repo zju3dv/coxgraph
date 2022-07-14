@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>system_suitesparse</name>
+  <version>4.2.1</version> 
+  <description>CMake scripts finding system suitesparse library</description>
+  <maintainer email="hannes.sommer@mavt.ethz.ch">Hannes Sommer</maintainer>
+  <license>LGPLv3 or later</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>libsuitesparse-dev</depend>
+</package>

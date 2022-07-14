@@ -1,0 +1,21 @@
+<package>
+  <name>vins_client_server</name>
+  <version>1.0.0</version>
+  <description>
+  	Client-Server version of VINS-Mono
+	</description>
+	
+  <maintainer email="lbartolomei@ethz.ch">Luca Bartolomei</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>vins_estimator</run_depend>
+  <run_depend>camera_model</run_depend>
+  <run_depend>feature_tracker</run_depend>
+  <run_depend>pose_graph</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="node_evaluator" type="evaluator_ros.py" name="evaluator_ros" output="screen">
+    <rosparam file="$(find node_evaluator)/config/example.yaml" command="load" />
+  </node>
+
+  <include file="$(find node_evaluator)/launch/example_nodes/talker_listener.launch" />
+
+</launch>

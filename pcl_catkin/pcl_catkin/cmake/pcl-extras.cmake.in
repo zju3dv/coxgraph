@@ -1,0 +1,66 @@
+# Find VTK
+option(WITH_VTK "Build VTK-Visualizations" TRUE)
+if(WITH_VTK AND NOT ANDROID)
+  find_package(VTK)
+  if(VTK_FOUND)
+    if(NOT DEFINED VTK_RENDERING_BACKEND)
+      # On old VTK versions this variable does not exist. In this case it is
+      # safe to assume OpenGL backend
+      set(VTK_RENDERING_BACKEND "OpenGL")
+    endif()
+    message(STATUS "VTK_MAJOR_VERSION ${VTK_MAJOR_VERSION}, rendering backend: ${VTK_RENDERING_BACKEND}")
+
+    set(VTK_FOUND TRUE)
+    find_package (QVTK)
+    if (${VTK_MAJOR_VERSION} VERSION_LESS "6.0")
+       message(STATUS "VTK found (include: ${VTK_INCLUDE_DIRS}, lib: ${VTK_LIBRARY_DIRS})")
+       link_directories(${VTK_LIBRARY_DIRS})
+    else(${VTK_MAJOR_VERSION} VERSION_LESS "6.0")
+       include (${VTK_USE_FILE})
+       message(STATUS "VTK found (include: ${VTK_INCLUDE_DIRS}, lib: ${VTK_LIBRARIES}")
+    endif (${VTK_MAJOR_VERSION} VERSION_LESS "6.0")
+    if (APPLE)
+        option (VTK_USE_COCOA "Use Cocoa for VTK render windows" ON)
+        MARK_AS_ADVANCED (VTK_USE_COCOA)
+    endif (APPLE)
+    if(${VTK_RENDERING_BACKEND} STREQUAL "OpenGL")
+      set(VTK_RENDERING_BACKEND_OPENGL_VERSION "1")
+    elseif(${VTK_RENDERING_BACKEND} STREQUAL "OpenGL2")
+      set(VTK_RENDERING_BACKEND_OPENGL_VERSION "2")
+    endif()
+    set(HAVE_VTK ON)
+  endif(VTK_FOUND)
+else(WITH_VTK AND NOT ANDROID)
+  set(VTK_FOUND OFF)
+  set(HAVE_VTK OFF)
+endif(WITH_VTK AND NOT ANDROID)
+
+# This overrides the PCL libraries with pcl_catkin libraries. Also adds VTK libs as pcl needs them.
+file(GLOB PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl*)
+# These lines make sure that we don't export pcl_ros libraries.
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_features${CMAKE_SHARED_LIBRARY_SUFFIX})
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_filters${CMAKE_SHARED_LIBRARY_SUFFIX})
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_io${CMAKE_SHARED_LIBRARY_SUFFIX})
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_segmentation${CMAKE_SHARED_LIBRARY_SUFFIX})
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_surface${CMAKE_SHARED_LIBRARY_SUFFIX})
+list(REMOVE_ITEM PclLibraries @CATKIN_DEVEL_PREFIX@/lib/libpcl_ros_tf${CMAKE_SHARED_LIBRARY_SUFFIX})
+
+set(PCL_LIBRARIES ${PclLibraries};${VTK_LIBRARIES};@Boost_LIBRARIES@)
+set(@PROJECT_NAME@_LIBRARIES ${PclLibraries};${VTK_LIBRARIES};@Boost_LIBRARIES@)
+
+# Same thing for include dirs.
+set(PCL_INCLUDE_DIRS @CATKIN_DEVEL_PREFIX@/include/pcl-1.9;${VTK_INCLUDE_DIRS};@Boost_INCLUDE_DIRS@)
+set(@PROJECT_NAME@_INCLUDE_DIRS @CATKIN_DEVEL_PREFIX@/include/pcl-1.9;${VTK_INCLUDE_DIRS};@Boost_INCLUDE_DIRS@)
+
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

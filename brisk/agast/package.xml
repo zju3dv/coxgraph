@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>agast</name>
+  <version>2.0.0</version>
+  <description>The agast package</description>
+
+  <maintainer email="slynen@ethz.ch">Simon Lynen</maintainer>
+  <license>New BSD</license>
+
+  <author email="elmar.mair@dlr.de">Elmar Mair</author>
+
+  <depend>glog_catkin</depend>
+  <depend>roscpp</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+</package>

@@ -1,0 +1,24 @@
+label: "VI-Sensor Sim"
+cameras:
+- camera:
+    label: cam0
+    image_height: 480
+    image_width: 752
+    type: pinhole
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [448.1008985853343, 448.1008985853343, 376.5, 240.5]
+    distortion:
+      type: radial-tangential
+      parameters:
+        cols: 1
+        rows: 4 
+        data: [0.0, 0.0, 0.0, 0.0]
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [0.0, 0.0, 1.0, 0.0,
+           -1.0, 0.0, 0.0, 0.055,
+           0.0, -1.0, 0.0, -0.005,
+           0.0, 0.0, 0.0, 1.0]

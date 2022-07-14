@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <name>robopt_open</name>
+  <version>0.5.0</version>
+  <description>ETHZ V4RL Optimization Library for Problems in Robotics</description>
+
+  <maintainer email="karrerm@ethz.ch"> </maintainer>
+
+  <license>??</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>eigen_catkin</build_depend>
+  <build_depend>eigen_checks</build_depend>
+  <build_depend>gflags_catkin</build_depend>
+  <build_depend>glog_catkin</build_depend>
+  <build_depend>ceres_catkin</build_depend> 
+  <build_depend>aslam_cv_cameras</build_depend>
+
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>ceres_catkin</run_depend>
+  <run_depend>aslam_cv_cameras</run_depend>
+
+  <test_depend>rosunit</test_depend>
+  <export>
+  </export>
+</package>

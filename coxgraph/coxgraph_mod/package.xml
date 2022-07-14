@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+        <name>coxgraph_mod</name>
+        <version>0.0.0</version>
+        <description>Simulation package of Coxgraph.</description>
+
+        <author email="xiangyu002@e.ntu.edu.sg">Mike Xiangyu Liu</author>
+
+        <maintainer email="xiangyu002@e.ntu.edu.sg">Mike Xiangyu Liu</maintainer>
+
+        <license>BSD</license>
+
+        <buildtool_depend>catkin</buildtool_depend>
+        <buildtool_depend>catkin_simple</buildtool_depend>
+
+        <depend>roscpp</depend>
+        <depend>coxgraph_msgs</depend>
+        <depend>eigen_catkin</depend>
+        <depend>cblox_msgs</depend>
+        <depend>tf</depend>
+        <depend>tf2</depend>
+        <depend>tf2_geometry_msgs</depend>
+        <depend>glog_catkin</depend>
+</package>

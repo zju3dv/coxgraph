@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>coxgraph_msgs</name>
+  <version>0.0.0</version>
+  <description>Message definitions for coxgraph messages.</description>
+
+  <author email="xiangyu002@e.ntu.edu.sg">Mike Xiangyu Liu</author>
+
+  <maintainer email="xiangyu002@e.ntu.edu.sg">Mike Xiangyu Liu</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
+  <depend>std_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>voxblox_msgs</depend>
+  <depend>cblox_msgs</depend>
+  <depend>voxgraph_msgs</depend>
+</package>
+

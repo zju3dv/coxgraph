@@ -1,0 +1,81 @@
+<launch>
+  <!-- Debug -->
+  <arg name="launch_prefix" default=""/> <!-- xterm -fs 60 -e gdb args -->
+  
+  <node name="pose_graph_backend" pkg="pose_graph_backend" type="pose_graph_node" output="screen" launch-prefix="$(arg launch_prefix)">
+    <!-- Are we running a simulation? -->
+    <param name="simulation" value="false"/>
+  
+    <!-- Vocabulary for loop closure -->
+    <param name="bow_voc" value="$(find pose_graph_backend)/conf/briskOKVIS_k10_L6_voc_v1.yml.gz"/>
+    
+    <!-- Number of agents and calibration values -->
+    <param name="num_agents" value="3" />
+
+    <param name="cam_config0" value="$(find pose_graph_backend)/conf/ncamera_v4rl0.yaml"/> <!-- JOHNNY -->
+    <rosparam param="gps_reference0"> [47.2347232, 7.6819736, 470]</rosparam>
+    <rosparam param="gps_offset0"> [0.0, 0.0, 0.0]</rosparam>
+
+    <param name="cam_config1" value="$(find pose_graph_backend)/conf/ncamera_v4rl0.yaml"/> <!-- FRANZ -->
+    <rosparam param="gps_reference1"> [47.2347232, 7.6819736, 470]</rosparam>
+    <rosparam param="gps_offset1"> [0.0, 0.0, 0.0]</rosparam>
+
+    <param name="cam_config2" value="$(find pose_graph_backend)/conf/ncamera_v4rl0.yaml"/>
+    <rosparam param="gps_reference2"> [47.2347232, 7.6819736, 470]</rosparam>
+    <rosparam param="gps_offset2"> [0.0, 0.0, 0.0]</rosparam>
+    
+    <!-- SYSTEM PERFORMANCE PARAMETERS -->
+    <param name="gps_align_num_corr"              value="6"/>
+    <param name="gps_align_cov_max"               value="0.2"/> 
+    <param name="rel_pose_corr_min"               value="12"/>
+    <param name="rel_pose_outlier_norm_min"       value="0.95"/>
+    <param name="local_opt_window_size"           value="6"/> 
+
+    <param name="loop_candidate_min_score"        value="0.02"/>
+    <param name="max_loop_candidates"             value="3"/>
+    <param name="loop_image_min_matches"          value="50"/> 
+    <param name="loop_detect_sac_thresh"          value="25"/>
+    <param name="loop_detect_sac_max_iter"        value="100"/> 
+    <param name="loop_detect_min_sac_inliers"     value="9"/> 
+    <param name="loop_detect_min_sac_inv_inliers" value="9"/> 
+    <param name="loop_detect_min_pose_inliers"    value="9"/>
+
+    <param name="loop_detect_reset_time"          value="6"/>
+    <param name="loop_detect_skip_kf"             value="1"/> <!-- set to 1 for process every kf -->
+    
+    <param name="information_odom_map_yaw"        value="200"/>
+    <param name="information_odom_map_p"          value="10"/>
+    <param name="information_odom_drift_yaw"      value="20000"/>
+    <param name="information_odom_drift_p"        value="5000"/>
+    <param name="information_odom_edges_yaw"      value="200000"/>
+    <param name="information_odom_edges_p"        value="10"/>
+    <param name="information_loop_edges_yaw"      value="2"/>
+    <param name="information_loop_edges_p"        value="1"/>
+
+    <param name="ignore_gps_altitude"             value="true"/>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- Topics remapping -->  
+    <param name="gps_active_0" value="true"/>
+    <remap from="/keyframe0"   to="/pcl_fusion_0/fused_vins_keyframe" /> 
+    <remap from="/odometry0"   to="/vins_estimator_0/odometry" />
+    <remap from="/gps0"        to="/pegasus/gps" />
+    <remap from="/fused_pcl0"  to="/pcl_fusion_0/fused_pcl"/>
+
+    <param name="gps_active_1" value="true"/>
+    <remap from="/keyframe1"   to="/pcl_fusion_1/fused_vins_keyframe" /> 
+    <remap from="/odometry1"   to="/vins_estimator_1/odometry" />
+    <remap from="/gps1"        to="/pegasus_1/gps" />
+    <remap from="/fused_pcl1"  to="/pcl_fusion_1/fused_pcl"/>
+
+    <param name="gps_active_2" value="true"/>
+    <remap from="/keyframe2"   to="/pcl_fusion_2/fused_vins_keyframe" /> 
+    <remap from="/odometry2"   to="/vins_estimator_2/odometry" />
+    <remap from="/gps2"        to="/pegasus_2/gps" /> 
+    <remap from="/fused_pcl2"  to="/pcl_fusion_2/fused_pcl"/>
+  </node>
+
+  <!-- RVIZ -->
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find pose_graph_backend)/conf/pgbe_rviz.rviz" />
+  
+</launch>

@@ -1,0 +1,6 @@
+file(GLOB ApproxMVBLibraries @CATKIN_DEVEL_PREFIX@/lib/libApproxMVBB*)
+
+set(ApproxMVBB_LIBRARIES ${ApproxMVBLibraries})
+set(@PROJECT_NAME@_LIBRARIES ${ApproxMVBLibraries})
+set(ApproxMVBB_INCLUDE_DIRS @CATKIN_DEVEL_PREFIX@/include/ApproxMVBB)
+set(@PROJECT_NAME@_INCLUDE_DIRS @CATKIN_DEVEL_PREFIX@/include/ApproxMVBB)

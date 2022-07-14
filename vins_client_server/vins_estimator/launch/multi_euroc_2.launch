@@ -1,0 +1,38 @@
+<launch>
+    <arg name="agent_id" default = "2" />
+    <arg name="config_path_2" default = "$(find feature_tracker)/../config/euroc/euroc_config_2.yaml" />
+	  <arg name="vins_path" default = "$(find feature_tracker)/../config/../" />
+    
+    <node name="feature_tracker_$(arg agent_id)" pkg="feature_tracker" type="feature_tracker" output="log">
+        <param name="config_file" type="string" value="$(arg config_path_2)" />
+        <param name="vins_folder" type="string" value="$(arg vins_path)" />
+
+    </node>
+
+    <node name="vins_estimator_$(arg agent_id)" pkg="vins_estimator" type="vins_estimator" output="screen">
+       <param name="config_file" type="string" value="$(find vins_estimator)/../config/euroc/euroc_config_2.yaml" />
+       <param name="vins_folder" type="string" value="" />
+       <param name="origin_frame_name" type="string" value="odom_a" />
+       <param name="camera_frame_name" type="string" value="cam_a" />
+       <param name="imu_frame_name" type="string" value="imu_a" />
+    
+       <remap from="vins_estimator_$(arg agent_id)/features" to="feature_tracker_$(arg agent_id)/feature" />
+       <remap from="vins_estimtor/feature_restart" to="feature_tracker/restart" />
+
+    </node>
+
+    <node name="pose_graph_$(arg agent_id)" pkg="pose_graph" type="pose_graph" output="screen">
+        <param name="config_file" type="string" value="$(arg config_path_2)" />
+        <param name="visualization_shift_x" type="int" value="0" />
+        <param name="visualization_shift_y" type="int" value="0" />
+        <param name="skip_cnt" type="int" value="0" />
+        <param name="skip_dis" type="double" value="0" />
+        <param name="num_odom_connections" type="int" value="3" />
+        <param name="agent_id" type="int" value="$(arg agent_id)"/>
+
+        <remap from="pose_graph_$(arg agent_id)/keyframe_pose" to="vins_estimator_$(arg agent_id)/keyframe_pose" />
+        <remap from="pose_graph_$(arg agent_id)/keyframe_point" to="vins_estimator_$(arg agent_id)/keyframe_point" />
+
+    </node>
+
+</launch>

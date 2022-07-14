@@ -1,0 +1,31 @@
+<launch>
+    <arg name="config_path" default = "$(find feature_tracker)/../config/euroc/euroc_config.yaml" />
+	  <arg name="vins_path" default = "$(find feature_tracker)/../config/../" />
+    
+    <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="screen">
+       <param name="config_file" type="string" value="$(find vins_estimator)/../config/euroc/euroc_config.yaml" />
+       <param name="vins_folder" type="string" value="" />
+       <param name="origin_frame_name" type="string" value="odom_a" />
+       <param name="camera_frame_name" type="string" value="cam_a" />
+       <param name="imu_frame_name" type="string" value="imu_a" />
+    
+       <remap from="vins_estimator/features" to="feature_tracker/feature" />
+       <remap from="vins_estimtor/feature_restart" to="feature_tracker/restart" />
+    </node>
+
+    <node name="pose_graph" pkg="pose_graph" type="pose_graph" output="screen">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="visualization_shift_x" type="int" value="0" />
+        <param name="visualization_shift_y" type="int" value="0" />
+        <param name="skip_cnt" type="int" value="0" />
+        <param name="skip_dis" type="double" value="0" />
+        <remap from="pose_graph/keyframe_pose" to="vins_estimator/keyframe_pose" />
+        <remap from="pose_graph/keyframe_point" to="vins_estimator/keyframe_point" />
+    </node>
+
+</launch>

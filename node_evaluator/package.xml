@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>node_evaluator</name>
+  <version>0.0.1</version>
+  <description>An evaluation tool for monitoring resource usage of ROS node </description>
+
+  <maintainer email="xiangyu002@e.ntu.edu.sg">Mike Xiangyu Liu</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>rospy_tutorials</depend>
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
+
+</package>

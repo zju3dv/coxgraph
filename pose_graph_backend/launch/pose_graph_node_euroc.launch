@@ -1,0 +1,92 @@
+<launch>
+  <!-- Debug -->
+  <arg name="launch_prefix" default=""/> <!-- xterm -fs 60 -e gdb args -->
+  <arg name="num_agents"    default="4" />
+  <arg name="logging"       default="true"/>
+
+  <!-- Pose-Graph Node -->
+  <node name="pose_graph_backend" pkg="pose_graph_backend" type="pose_graph_node" output="screen" launch-prefix="$(arg launch_prefix)">
+    <!-- Vocabulary for loop closure -->
+    <param name="bow_voc" value="$(find pose_graph_backend)/conf/briskOKVIS_k10_L6_voc_v1.yml.gz"/>
+    
+    <!-- Number of agents and calibration values -->
+    <param name="num_agents" value="$(arg num_agents)" />
+
+    <param name="cam_config0" value="$(find pose_graph_backend)/conf/ncamera0.yaml"/>
+    <rosparam param="gps_reference0"> [0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="gps_offset0"> [7.48903e-02, -1.84772e-02, -1.20209e-01]</rosparam>
+
+    <param name="cam_config1" value="$(find pose_graph_backend)/conf/ncamera0.yaml"/>
+    <rosparam param="gps_reference1"> [0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="gps_offset1"> [7.48903e-02, -1.84772e-02, -1.20209e-01]</rosparam>
+
+    <param name="cam_config2" value="$(find pose_graph_backend)/conf/ncamera0.yaml"/>
+    <rosparam param="gps_reference2"> [0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="gps_offset2"> [7.48903e-02, -1.84772e-02, -1.20209e-01]</rosparam>
+
+    <param name="cam_config3" value="$(find pose_graph_backend)/conf/ncamera0.yaml"/>
+    <rosparam param="gps_reference3"> [0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="gps_offset3"> [7.48903e-02, -1.84772e-02, -1.20209e-01]</rosparam>
+    
+    <!-- LOOP DETECTION PERFORMANCE PARAMETERS-->
+    <param name="gps_align_num_corr"              value="5"/>    <!-- Optimizer::computeGPSAlignment -->
+    <param name="gps_align_cov_max"               value="0.3"/>  <!-- Optimizer::computeGPSAlignment -->
+    <param name="rel_pose_corr_min"               value="12"/>   <!-- Optimizer::optimizeRelativePose -->
+    <param name="rel_pose_outlier_norm_min"       value="0.95"/> <!-- Optimizer::optimizeRelativePose -->
+    <param name="local_opt_window_size"           value="10"/>   <!-- Optimizer::optimizeLocalPoseGraph -->
+
+    <param name="loop_candidate_min_score"        value="0.02"/> <!-- KeyFrameDatabase::detectLoopCandidates -->
+    <param name="max_loop_candidates"             value="3"/>    <!-- KeyFrameDatabase::detectLoopCandidates -->
+    <param name="loop_image_min_matches"          value="80"/>   <!-- LoopDetector::addKeyFrame -->
+    <param name="loop_detect_sac_thresh"          value="5"/>    <!-- LoopDetector::addKeyFrame -->
+    <param name="loop_detect_sac_max_iter"        value="200"/>  <!-- LoopDetector::addKeyFrame -->
+    <param name="loop_detect_min_sac_inliers"     value="15"/>   <!-- LoopDetector::addKeyFrame 10 -->
+    <param name="loop_detect_min_sac_inv_inliers" value="15"/>   <!-- LoopDetector::addKeyFrame 10 -->
+    <param name="loop_detect_min_pose_inliers"    value="15"/>   <!-- LoopDetector::addKeyFrame -->
+
+    <param name="loop_detect_reset_time"          value="5"/>    <!-- System::keyFrameConsumerLoop -->
+    <param name="loop_detect_skip_kf"             value="3"/>    <!-- System::keyFrameConsumerLoop -->
+    
+    <param name="information_odom_map_yaw"        value="10"/>
+    <param name="information_odom_map_p"          value="10"/>
+    <param name="information_odom_drift_yaw"      value="20000"/>
+    <param name="information_odom_drift_p"        value="5000"/>
+    <param name="information_odom_edges_yaw"      value="200000"/>
+    <param name="information_odom_edges_p"        value="10"/>
+    <param name="information_loop_edges_yaw"      value="2"/>
+    <param name="information_loop_edges_p"        value="2"/>
+
+    <param name="ignore_gps_altitude"             value="false"/>
+    <param name="simulation"                      value="false"/>
+    <param name="logging"                         value="$(arg logging)"/>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- Topics remapping -->    
+    <param name="gps_active_0" value="true"/>
+    <remap from="/keyframe0"   to="/pcl_fusion_0/fused_vins_keyframe" /> 
+    <remap from="/odometry0"   to="/vins_estimator_0/odometry" />
+    <remap from="/fake_gps2_0" to="/leica_0/position" /> 
+    <remap from="/fused_pcl0"  to="/pcl_fusion_0/fused_pcl"/>
+
+    <param name="gps_active_1" value="true"/>
+    <remap from="/keyframe1"   to="/pcl_fusion_1/fused_vins_keyframe" />
+    <remap from="/odometry1"   to="/vins_estimator_1/odometry" />
+    <remap from="/fake_gps2_1" to="/leica_1/position" />
+    <remap from="/fused_pcl1"  to="/pcl_fusion_1/fused_pcl"/>
+
+    <param name="gps_active_2" value="true"/>
+    <remap from="/keyframe2"   to="/pcl_fusion_2/fused_vins_keyframe" />
+    <remap from="/odometry2"   to="/vins_estimator_2/odometry" />
+    <remap from="/fake_gps2_2" to="/leica_2/position" />
+    <remap from="/fused_pcl2"  to="/pcl_fusion_2/fused_pcl"/>
+
+    <param name="gps_active_3" value="true"/>
+    <remap from="/keyframe3"   to="/pcl_fusion_3/fused_vins_keyframe" />
+    <remap from="/odometry3"   to="/vins_estimator_3/odometry" />
+    <remap from="/fake_gps2_3" to="/leica_3/position" />
+    <remap from="/fused_pcl3"  to="/pcl_fusion_3/fused_pcl"/>
+  </node>
+
+  <!-- RVIZ -->
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find pose_graph_backend)/conf/pgbe_rviz.rviz" />
+</launch>

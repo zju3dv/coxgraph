@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pose_graph_backend</name>
+  <version>0.0.0</version>
+  <description>
+    Loop-closing and pose graph based correction for Keyframe based VIO. 
+  </description>
+  <url></url>
+  <author>Marco Karrer</author>
+  <maintainer email="marco.karrer@mavt.ethz.ch">Marco Karrer</maintainer>
+  <license>Propriatary</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>cmake_modules</depend>
+  <depend>roscpp</depend>
+  <depend>roslib</depend>
+  <depend>cv_bridge</depend>
+  <depend>comm_msgs</depend>
+  <depend>eigen_catkin</depend>
+  <depend>ceres_catkin</depend>
+  <depend>aslam_cv_cameras</depend> 
+  <depend>brisk</depend>
+  <depend>geodetic_utils</depend>
+  <depend>opengv</depend>
+  <depend>robopt_open</depend>
+  <depend>coxgraph_mod</depend>
+  <depend>pcl_ros</depend>
+  <depend>pcl_conversions</depend>
+
+</package>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ethzasl_apriltag2</name>
+  <description>Catkin wrapper of http://people.csail.mit.edu/kaess/apriltags/
+  </description>
+  <version>0.0.1</version>
+  <maintainer email="thomas.schneider@mavt.ethz.ch">Thomas Schneider</maintainer>
+  <author>Thomas Schneider</author>
+  <license>-</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+  
+  <depend>cmake_modules</depend>
+  <depend>eigen_catkin</depend>
+  <depend>opencv3_catkin</depend>
+</package>

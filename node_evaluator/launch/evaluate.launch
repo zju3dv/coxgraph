@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="config_file"/>
+  <arg name="record_bag" default="true"/>
+
+  <arg name="debug" default="false"/>
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg if="$(arg debug)" name="launch_prefix" value="xterm -e python -m pdb" />
+  <node pkg="node_evaluator" type="evaluator_ros.py" name="evaluator_ros" output="screen" launch-prefix="$(arg launch_prefix)">
+    <rosparam file="$(arg config_file)" command="load" />
+  </node>
+
+  <node if="$(arg record_bag)" pkg="rosbag" type="record" name="eval_data_recorder" args="-o eval_data /firefly_1/vins_estimator_1/odometry /firefly_0/vins_estimator_0/odometry /tf" />
+
+</launch>

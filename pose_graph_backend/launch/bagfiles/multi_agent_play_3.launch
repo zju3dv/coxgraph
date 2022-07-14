@@ -1,0 +1,11 @@
+<launch>
+  <arg name="path" />
+  <node pkg="rosbag" type="play" name="player_3" output="screen" args="$(arg path) -s 15.0" > 
+    <remap from="/cam0/image_raw" to="/cam0_3/image_raw"/>
+    <remap from="/cam1/image_raw" to="/cam1_3/image_raw"/>
+    <remap from="/imu0" to="/imu0_3"/>
+    <remap from="/leica/position" to="/leica_3/position"/>
+  </node>
+</launch>
+
+

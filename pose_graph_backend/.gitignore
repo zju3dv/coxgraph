@@ -1,0 +1,26 @@
+# CMake
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+build*
+lib
+bin
+
+# Eclipse Project Files
+.cproject
+.project
+.settings
+
+# Qt-creater File
+*.user
+
+# Autosave Files
+*~
+*.autosave
+logs/*
+
+compile_commands.json
+.cache

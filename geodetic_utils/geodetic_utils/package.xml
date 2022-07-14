@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>geodetic_utils</name>
+  <version>1.0.0</version>
+  <description>Simple library for converting coordinates to/from several geodetic frames (lat/lon, ECEF, ENU, NED, etc.)</description>
+
+  <author>Enric Galceran</author>
+  <author>Marija Popovic</author>
+  <author>Raghav Khanna</author>
+
+  <maintainer email="enric.galceran@mavt.ethz.ch">Enric Galceran</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>catkin_simple</buildtool_depend>
+
+   <!-- Dependencies. -->
+  <depend>roslib</depend>
+  <depend>roscpp</depend>
+  <depend>tf</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <!--cmake_modules dependency required for (find Eigen) command-->
+  <depend>cmake_modules</depend>
+  <!--std_srvs provides the Empty service used to reset the gps reference ]-->
+  <depend>std_srvs</depend>
+</package>

@@ -1,0 +1,5 @@
+# request
+---
+# reponse
+uint8 n_submaps
+coxgraph_msgs/BoundingBox[] bb
