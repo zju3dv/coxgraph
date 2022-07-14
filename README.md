@@ -5,7 +5,7 @@ As the name indicates, **Coxgraph** is heavily inspired by and adapted from [**V
 We extend it to multi robot scenarios, and reduce the bandwidth of submap transmission by convert TSDF submaps to *mesh packs* and recover it back in the server.
 Then check validity of the loop closure matches and optimization based on dense submaps.
 
-[![Video player thumbnail for GitHub](https://raw.githubusercontent.com/LXYYY/lxyyy.github.io/master/images/coxgraph_video_thumbnail.jpg)](https://youtu.be/KgPLRP_ADQQ)
+[![Video player thumbnail for GitHub](https://raw.githubusercontent.com/LXYYY/lxyyy.github.io/master/images/coxgraph_video_thumbnail.jpg)](https://youtu.be/KgPLRP_ADQQ) 
 
 ## Citing
 
