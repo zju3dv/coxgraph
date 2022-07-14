@@ -1,3 +1,0 @@
-coxgraph_msgs/MapHeader map_header
-voxblox_msgs/LayerWithTrajectory layer_with_traj
-sensor_msgs/PointCloud2 mesh_pointclouds
