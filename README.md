@@ -54,7 +54,7 @@ You can download the pdf from [here](http://www.cad.zju.edu.cn/home/gfzhang/pape
 ### Run
         roslaunch coxgraph run_experiment_euroc.launch 
         roslaunch coxgraph coxgraph_rviz.launch
-	rosservice call /coxgraph/coxgraph_server_node/get_final_global_mesh "filepath=<result_dir>"
+        rosservice call /coxgraph/coxgraph_server_node/get_final_global_mesh "filepath=<result_dir>"
         (you need to wait to save the mesh)
 
 ### SLAM Frontend Selection
