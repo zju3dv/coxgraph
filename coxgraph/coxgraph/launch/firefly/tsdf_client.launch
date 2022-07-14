@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+        <arg name="id" default="" />
+        <arg name="client_number" default="2" />
+        <arg name="robot_namespace" default="firefly" />
+        <arg name="world_frame_suffix" default="map" />
+
+        <!-- User supplied arguments -->
+        <arg name="show_rviz" default="false" doc="Automatically launch Rviz." />
+        <arg name="scene_name" default="cvg_lab" />
+        <arg name="sensor_name" default="firefly" />
+        <arg name="visualize" default="false" />
+        <arg name="verbose" default="true" />
+        <arg name="debug" default="false" />
+        <arg name="pointcloud_topic" doc="ROS topic for pointcloud input" />
+        <arg name="tw_voxblox_config_file" default="$(find coxgraph)/config/tsdf_server_default.yaml" />
+        <arg name="tsdf_voxel_size" default="0.10" />
+        <arg name="truncation_distance" default="0.30" />
+        <arg name="recover_mode" default="true" />
+
+        <arg unless="$(arg debug)" name="launch_prefix" value=" " />
+        <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb -ex run --args" />
+
+        <node name="tsdf_client_$(arg id)" pkg="voxblox_ros" type="tsdf_server" output="screen" args="-alsologtostderr" clear_params="true" launch-prefix="$(arg launch_prefix)">
+                <remap from="pointcloud" to="$(arg pointcloud_topic)" />
+                <rosparam file="$(arg tw_voxblox_config_file)" />
+                <param name="meshing/visualize" value="$(arg visualize)" />
+                <param name="enable_segment_map" value="false" />
+                <param name="enable_local_segment_map" value="false" />
+                <param name="verbose" value="$(arg verbose)" />
+                <param name="publish_tsdf_map" value="true" />
+                <param name="publish_esdf_map" value="true" />
+                <param name="publish_slices" value="true" />
+                <param name="publish_pointclouds" value="true" />
+                <param name="publish_traversable" value="true" />
+                <param name="update_esdf_every_n_sec " value="0.5" />
+                <param name="publish_active_tsdf_every_n_sec " value="0.5" />
+                <param name="world_frame" value="$(arg world_frame_suffix)_$(arg id)" />
+                <param name="client_number" value="$(arg client_number)" />
+                <param name="client_id" value="$(arg id)" />
+                <param name="robot_namespace" value="$(arg robot_namespace)" />
+                <param name="baselink_frame" value="base_link" />
+                <param name="collision_radius" value="1.0" />
+                <param name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <param name="truncation_distance" value="$(arg truncation_distance)" />
+                <param if="$(arg recover_mode)" name="publish_mesh_with_history" value="true" />
+                <param unless="$(arg recover_mode)" name="publish_mesh_with_history" value="false" />
+        </node>
+
+        <node if="$(arg recover_mode)" name="tsdf_recover_node_$(arg id)" pkg="coxgraph" type="tsdf_recover_node" output="screen" args="-alsologtostderr">
+                <remap from="~mesh_with_history" to="tsdf_client_$(arg id)/mesh_with_history" />
+                <rosparam file="$(find coxgraph)/config/tsdf_recover.yaml" />
+                <param name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <param name="truncation_distance" value="$(arg truncation_distance)" />
+                <param name="world_frame" value="$(arg world_frame_suffix)_$(arg id)" />
+        </node>
+
+</launch>

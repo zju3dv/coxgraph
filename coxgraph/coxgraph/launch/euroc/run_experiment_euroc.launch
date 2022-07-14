@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<launch>
+        <param name="use_sim_time" value="false" />
+        <arg name="euroc_dir" default="/home/lxl/Documents/dataset/bagfiles" />
+
+        <arg name="bag_file0" default="$(arg euroc_dir)/MH_01_easy.bag" />
+        <arg name="bag_file1" default="$(arg euroc_dir)/MH_02_easy.bag" />
+        <arg name="bag_file2" default="$(arg euroc_dir)/MH_03_medium.bag" />
+        <arg name="tw_voxblox_config_file" default="$(find coxgraph)/config/tsdf_server_euroc.yaml" />
+        <arg name="tsdf_voxel_size" default="0.10" />
+        <arg name="truncation_distance" default="0.30" />
+        <arg name="recover_mode" default="true" />
+        <arg name="evaluate" default="false" />
+
+        <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+                <arg name="id" value="0" />
+                <arg name="clock" value="false" />
+                <arg name="play_speed" value="0.3" />
+                <arg name="bag_file" value="$(arg bag_file0)" />
+                <arg name="bag_ripped" default="false" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/firefly/coxgraph_client.launch">
+                <arg name="id" value="0" />
+                <arg name="pointcloud_topic" value="/pointcloud_0" />
+                <arg name="world_frame_suffix" value="odom" />
+                <arg name="tw_voxblox_config_file" value="$(arg tw_voxblox_config_file)" />
+                <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <arg name="truncation_distance" value="$(arg truncation_distance)" />
+                <arg name="debug_cg" value="false" />
+                <arg name="recover_mode" value="$(arg recover_mode)" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+                <arg name="id" value="1" />
+                <arg name="clock" value="false" />
+                <arg name="play_speed" value="0.3" />
+                <arg name="bag_file" value="$(arg bag_file1)" />
+                <arg name="bag_ripped" default="false" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/firefly/coxgraph_client.launch">
+                <arg name="id" value="1" />
+                <arg name="pointcloud_topic" default="/pointcloud_1" />
+                <arg name="world_frame_suffix" default="odom" />
+                <arg name="tw_voxblox_config_file" default="$(arg tw_voxblox_config_file)" />
+                <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <arg name="truncation_distance" value="$(arg truncation_distance)" />
+                <arg name="debug_tsdf" default="false" />
+                <arg name="recover_mode" value="$(arg recover_mode)" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+                <arg name="id" value="2" />
+                <arg name="clock" value="false" />
+                <arg name="play_speed" value="0.3" />
+                <arg name="bag_file" value="$(arg bag_file2)" />
+                <arg name="bag_ripped" default="false" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/firefly/coxgraph_client.launch">
+                <arg name="id" value="2" />
+                <arg name="pointcloud_topic" default="/pointcloud_2" />
+                <arg name="world_frame_suffix" default="odom" />
+                <arg name="tw_voxblox_config_file" default="$(arg tw_voxblox_config_file)" />
+                <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <arg name="truncation_distance" value="$(arg truncation_distance)" />
+                <arg name="debug_tsdf" default="false" />
+                <arg name="recover_mode" value="$(arg recover_mode)" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/utils/pose_graph_backend.launch">
+                <arg name="num_agents" default="3" />
+        </include>
+
+        <include file="$(find coxgraph)/launch/coxgraph_server.launch">
+                <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                <arg name="truncation_distance" value="$(arg truncation_distance)" />
+                <arg name="map_frame_prefix" default="odom" />
+                <arg name="debug" default="false" />
+        </include>
+
+        <include if="$(arg evaluate)" file="$(find node_evaluator)/launch/evaluate.launch">
+                <arg name="config_file" default="$(find coxgraph)/config/evaluation_config.yaml" />
+                <arg name="debug" default="false" />
+        </include>
+
+        <node name="result_recorder" pkg="rosbag" type="record" output="screen" args="-o $(find coxgraph)/eval/tf_record /coxgraph/tsdf_client_0/mesh /coxgraph/tsdf_client_0/mesh_with_history /coxgraph/tsdf_client_0/tsdf_map_out /firefly_0/pose_graph_0/vins_keyframe /tf" />
+</launch>

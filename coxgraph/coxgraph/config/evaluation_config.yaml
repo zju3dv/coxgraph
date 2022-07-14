@@ -1,0 +1,11 @@
+node_names: ["/coxgraph/tsdf_client_0"]
+node_eval_mode:  [["cpu","mem"]]
+
+topic_names: ["/coxgraph/tsdf_client_0/mesh_with_history", "/firefly_0/pose_graph_0/vins_keyframe"]
+topic_eval_mode: [["topic_bw"],["topic_bw"]]
+
+sys_eval_mode: ["sys_bw"]
+
+plot_dir: "/xxx/eva_res"
+
+

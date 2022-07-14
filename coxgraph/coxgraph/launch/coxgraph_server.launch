@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+      <arg name="client_number" default="2"/>
+      <arg name="sim_server" default="false" doc="Publish a static unit transform between client maps, without running the server"/>
+      <arg name="map_frame_prefix" default="map"/>
+      <arg name="tsdf_voxel_size" default="0.05"/>
+      <arg name="truncation_distance" default="0.15"/>
+      <arg name="debug" default="false"/>
+
+      <group if="$(arg sim_server)">
+            <node pkg="tf" type="static_transform_publisher" name="sim_map0_to_map" args="0 0 0 0 0 0 1 map map0 100"/>
+            <node pkg="tf" type="static_transform_publisher" name="sim_map1_to_map" args="10 0 0 0 0 0 1 map map1 100"/>
+            <node pkg="tf" type="static_transform_publisher" name="sim_map2_to_map" args="0 10 0 0 0 0 1 map map2 100"/>
+            <node pkg="tf" type="static_transform_publisher" name="sim_map3_to_map" args="10 10 0 0 0 0 1 map map3 100"/>
+      </group>
+
+      <group ns="coxgraph" unless="$(arg sim_server)">
+            <arg unless="$(arg debug)" name="launch_prefix" value="xterm -e" />
+            <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb -ex run --args" />
+            <node pkg="coxgraph" type="coxgraph_server_node" name="coxgraph_server_node" output="screen" args="-alsologtostderr" clear_params="true" launch-prefix="$(arg launch_prefix)">
+                  <rosparam file="$(find coxgraph)/config/server.yaml"/>
+                  <param name="map_frame_prefix" value="$(arg map_frame_prefix)"/>
+                  <param name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)"/>
+                  <param name="truncation_distance" value="$(arg truncation_distance)"/>
+            </node>
+      </group>
+
+</launch>

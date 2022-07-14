@@ -1,0 +1,70 @@
+verbose: true
+client_number: 3
+
+tsdf_voxel_size: 0.10
+
+map_fusion_queue_size: 100
+
+client_handler:
+  client_name_prefix: "coxgraph_client"
+  client_loop_closure_topic_suffix: "loop_closure_in"
+  client_map_pose_update_topic_suffix: "map_pose_update_in"
+  pub_queue_length: 10
+
+fixed_map_client_id: 0
+refuse_interval: 20
+
+output_mission_frame: "map"
+
+mesh_min_weight: 1.0
+mesh_use_color: true
+submap_mesh_color_mode: "lambert_color"
+combined_mesh_color_mode: "normals"
+
+global_tf_controller:
+  init_cli_map_dist: 10
+  map_frame_prefix: "map"
+
+submap_registration:
+  enabled: true
+  sampling_ratio: 0.3
+  registration_method: "explicit_to_implicit"
+  information_matrix:
+    x_x: 1.0
+    y_y: 1.0
+    z_z: 1.0
+    yaw_yaw: 1.0
+loop_closure:
+  enabled: true
+  information_matrix:
+    x_x: 100.0
+    y_y: 100.0
+    z_z: 250.0
+    yaw_yaw: 250.0
+
+submap_relative_pose:
+  enabled: true
+  information_matrix:
+    x_x: 1000.0
+    y_y: 1000.0
+    z_z: 2500.0
+    yaw_yaw: 2500.0
+
+client_map_relative_pose:
+  information_matrix:
+    x_x: 100.0
+    y_y: 100.0
+    z_z: 250.0
+    yaw_yaw: 250.0
+
+enable_client_loop_closure: false
+publish_submap_meshes_every_n_sec: 0.0
+
+o3d_visualize: true
+publish_global_mesh_on_update: true
+publish_combined_mesh: true
+
+k_traj: 0.3
+k_overlap: 0.1
+o3d_color_mode: 2
+o3d_vis_traj: true

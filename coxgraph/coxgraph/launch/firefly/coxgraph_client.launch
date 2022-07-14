@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+        <arg name="id" default="0" />
+
+        <arg name="robot_namespace" default="firefly" />
+        <arg name="sensor" default="firefly" />
+        <arg name="pointcloud_topic" doc="ROS topic for pointcloud input" default="/firefly_$(arg id)/vi_sensor/camera_depth/depth/points" />
+        <arg name="debug_cg" default="false" doc="Run the coxgraph client in debug mode." />
+        <arg name="debug_tsdf" default="false" doc="Run the tsdf client in debug mode." />
+        <arg name="verbose" default="false" />
+        <arg name="client_number" default="3" />
+        <arg name="world_frame_suffix" default="map" />
+        <arg name="tw_voxblox_config_file" default="$(find coxgraph)/config/tsdf_server_default.yaml" />
+        <arg name="tsdf_voxel_size" default="0.10" />
+        <arg name="truncation_distance" default="0.30" />
+        <arg name="recover_mode" default="true" />
+
+        <group ns="coxgraph">
+                <arg unless="$(arg debug_cg)" name="launch_prefix" value="" />
+                <arg if="$(arg debug_cg)" name="launch_prefix" value="xterm -e gdb --args" />
+
+                <node name="coxgraph_client_$(arg id)" pkg="coxgraph" type="coxgraph_client_node" output="screen" launch-prefix="$(arg launch_prefix)" args="-alsologtostderr">
+                        <remap from="~keyframe_pose" to="/firefly_$(arg id)/vins_estimator_$(arg id)/keyframe_pose" />
+                        <remap from="/loop_closure_in" to="coxgraph_client_$(arg id)/loop_closure_in" />
+                        <rosparam file="$(find coxgraph)/config/coxgraph_client.yaml" />
+                        <param name="input_odom_frame" value="$(arg world_frame_suffix)_$(arg id)" />
+                        <param name="input_base_link_frame" value="firefly_$(arg id)/base_link" />
+                        <param name="output_odom_frame" value="$(arg world_frame_suffix)_$(arg id)" />
+                        <param name="output_base_link_frame" value="firefly_$(arg id)/base_link" />
+                        <param name="output_sensor_frame" value="sensor_coxgraph_$(arg id)" />
+                        <param name="output_active_submap_frame" value="voxgraph_active_submap_$(arg id)" />
+                        <param name="publish_traversable" value="true" />
+                        <param name="client_id" value="$(arg id)" />
+                        <param name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                        <param name="truncation_distance" value="$(arg truncation_distance)" />
+                        <param name="publish_mesh_with_trajectory" value="true" />
+
+                        <param name="recover_mode" value="$(arg recover_mode)" />
+                        <param if="$(arg recover_mode)" name="submap_topic" value="/coxgraph/tsdf_recover_node_$(arg id)/tsdf_map_out" />
+                        <remap if="$(arg recover_mode)" from="~mesh_pointcloud" to="tsdf_recover_node_$(arg id)/mesh_pointcloud" />
+                        <param unless="$(arg recover_mode)" name="submap_topic" value="/coxgraph/tsdf_client_$(arg id)/tsdf_map_out" />
+                </node>
+
+                <include file="$(find coxgraph)/launch/firefly/tsdf_client.launch">
+                        <arg name="debug" default="$(arg debug_tsdf)" />
+                        <arg name="verbose" default="$(arg verbose)" />
+                        <arg name="sensor_name" default="$(arg sensor)" />
+                        <arg name="id" default="$(arg id)" />
+                        <arg name="client_number" default="$(arg client_number)" />
+                        <arg name="robot_namespace" value="$(arg robot_namespace)" />
+                        <arg name="pointcloud_topic" default="$(arg pointcloud_topic)" />
+                        <arg name="world_frame_suffix" default="$(arg world_frame_suffix)" />
+                        <arg name="tw_voxblox_config_file" value="$(arg tw_voxblox_config_file)" />
+                        <arg name="tsdf_voxel_size" value="$(arg tsdf_voxel_size)" />
+                        <arg name="truncation_distance" value="$(arg truncation_distance)" />
+                        <arg name="recover_mode" default="$(arg recover_mode)" />
+                </include>
+        </group>
+
+</launch>
