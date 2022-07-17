@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+        <param name="use_sim_time" value="true" />
+
+        <arg name="bag_name" default="MH_03_medium.bag" />
+        <arg name="bag_file" default="/media/zhouxin/66D231E0D231B4E15/Dataset/EuRoC/EuRoC_ros/rosbag/$(arg bag_name)" />
+        <arg name="id" default="2" />
+
+        <include file="$(find coxgraph)/launch/euroc/vins_client_euroc.launch">
+                <arg name="bag_file" value="$(arg bag_file)" />
+                <arg name="clock" default="true" />
+                <arg name="id" default="$(arg id)" />
+                <arg name="use_vins" default="false" />
+        </include>
+
+        <node name="recorder" pkg="rosbag" type="record" output="screen" args="-O /media/zhouxin/66D231E0D231B4E15/Dataset/EuRoC/EuRoC_ros/rosbag/$(arg bag_name).data.bag  -b 4096 /cam0_$(arg id)/image_raw /cam1_$(arg id)/image_raw /imu0_$(arg id) /pointcloud_$(arg id) /tf /clock" />
+</launch>

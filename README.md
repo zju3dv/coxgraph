@@ -5,7 +5,7 @@ As the name indicates, **Coxgraph** is heavily inspired by and adapted from [**V
 We extend it to multi robot scenarios, and reduce the bandwidth of submap transmission by convert TSDF submaps to *mesh packs* and recover it back in the server.
 Then check validity of the loop closure matches and optimization based on dense submaps.
 
-[![Video player thumbnail for GitHub](https://raw.githubusercontent.com/LXYYY/lxyyy.github.io/master/images/coxgraph_video_thumbnail.jpg)](https://youtu.be/KgPLRP_ADQQ) 
+[![Video player thumbnail for GitHub](https://raw.githubusercontent.com/LXYYY/lxyyy.github.io/master/images/coxgraph_video_thumbnail.jpg)](https://youtu.be/KgPLRP_ADQQ)
 
 ## Citing
 
@@ -27,10 +27,10 @@ You can download the pdf from [here](http://www.cad.zju.edu.cn/home/gfzhang/pape
 
 ### Requirements
 
-1. Ubuntu 18 or 20;
-2. ROS Melodic or Noetic
-3. OpenCV 3 or 4;
-4. Open3D 0.11 or newer.
+1. Ubuntu 18;
+2. ROS Melodic;
+3. OpenCV 3;
+4. Open3D 0.10.
 
 ### Build
 
@@ -47,28 +47,26 @@ You can download the pdf from [here](http://www.cad.zju.edu.cn/home/gfzhang/pape
         catkin config --merge-devel
         catkin config -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
 
-3. Start building:
+3. Clone the repository and dependencies:
+
+        cd src
+        git clone git@github.com:zju3dv/coxgraph.git
+        wstool init
+        wstool merge coxgraph/coxgraph_ssh.rosinstall
+        wstool update
+
+4. Start building:
 
         catkin build coxgraph vins_client_server pose_graph_backend image_undistort
 
-### Run
-        roslaunch coxgraph run_experiment_euroc.launch 
-        roslaunch coxgraph coxgraph_rviz.launch
-        rosservice call /coxgraph/coxgraph_server_node/get_final_global_mesh "filepath=<result_dir>"
-        (you need to wait to save the mesh)
-
 ### SLAM Frontend Selection
 
-A convenient interface enabling any multi-robot SLAM system to cooperate with **Coxgraph** is provided named as `coxgraph_mod`. One can easily insert a few lines into other frontend to use it with **Coxgraph**.
-So far, there are three frontends we can use:
-
-1. **vins_client_server**, used in the demo;
-2. **CORB_SLAM**
-3. We also implement a Multi-Robot version of **rovioli** . (in production)
+A convenient interface enabling any multi-robot SLAM system to cooperate with **Coxgraph** is provided named as `coxgraph_mod`. One can easily insert a few lines into other frontend to use it with **Coxgraph**. In this code, we used **vins_client_server** as the frontend.
 
 ### Experiment Machine Hall
 
 1. Download EuRoC bag files [here](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets).
-2. Run the launch file:
+2. In this code, we run 2-agent collaborative session on the same machine. If you run 3-agent simultaneously, the performence of **Coxgraph** might degrade since the computational resources are overloaded. Run the launch file:
 
         roslaunch coxgraph run_experiment_euroc.launch
+        roslaunch coxgraph coxgraph_rviz.launch

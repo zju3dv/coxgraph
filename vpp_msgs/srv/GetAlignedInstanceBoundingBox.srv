@@ -1,3 +1,0 @@
-uint16 instance_id
----
-vpp_msgs/BoundingBox bbox

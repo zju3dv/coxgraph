@@ -1,7 +1,0 @@
-syntax = "proto2";
-
-package cblox;
-
-message SubmapCollectionProto {
-  optional uint32 num_submaps = 3;
-}

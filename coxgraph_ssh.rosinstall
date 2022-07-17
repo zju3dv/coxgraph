@@ -52,18 +52,56 @@
 - git:
     local-name: protobuf_catkin
     uri: git@github.com:ethz-asl/protobuf_catkin.git
-- git: {local-name: comm_msgs, uri: 'git@github.com:VIS4ROB-lab/comm_msgs.git'}
-- git: {local-name: node_evaluator, uri: 'git@github.com:LXYYY/node_evaluator.git', version: 'main'}
-- git: {local-name: image_undistort, uri: 'git@github.com:ethz-asl/image_undistort.git', version: 'master'}
-- git: {local-name: vins_client_server, uri: 'git@github.com:LXYYY/vins_client_server.git', version: 'develop'}
-- git: {local-name: pose_graph_backend, uri: 'git@github.com:LXYYY/pose_graph_backend.git', version: 'develop'}
-- git: {local-name: brisk, uri: 'git@github.com:LXYYY/ethzasl_brisk.git'}
-- git: {local-name: aslam_cv2, uri: 'git@github.com:LXYYY/aslam_cv2.git' version: 'devel/noetic'}
-- git: {local-name: doxygen_catkin, uri: 'git@github.com:ethz-asl/doxygen_catkin.git'}
-- git: {local-name: yaml_cpp_catkin, uri: 'git@github.com:ethz-asl/yaml_cpp_catkin.git'}
-- git: {local-name: opengv, uri: 'git@github.com:ethz-asl/opengv.git'}
-- git: {local-name: geodetic_utils, uri: 'git@github.com:ethz-asl/geodetic_utils.git'}
-- git: {local-name: robopt_open, uri: 'git@github.com:VIS4ROB-lab/robopt_open.git'}
-- git: {local-name: ethzasl_apriltag2, uri: 'git@github.com:ethz-asl/ethzasl_apriltag2.git'}
-- git: {local-name: opencv3_catkin, uri: 'git@github.com:LXYYY/opencv3_catkin.git', version: 'feature/system_opencv'}
+- git: 
+    local-name: comm_msgs
+    uri: git@github.com:VIS4ROB-lab/comm_msgs.git
+- git: 
+    local-name: node_evaluator
+    uri: git@github.com:LXYYY/node_evaluator.git
+    version: main
+- git:
+    local-name: image_undistort
+    uri: git@github.com:ethz-asl/image_undistort.git
+    version: master
+- git: 
+    local-name: vins_client_server
+    uri: git@github.com:LXYYY/vins_client_server.git
+    version: develop
+- git:
+    local-name: pose_graph_backend
+    uri: git@github.com:LXYYY/pose_graph_backend.git
+    version: develop
+- git:
+    local-name: pcl_catkin
+    uri: git@github.com:XiliangLi/pcl_catkin.git
+    version: 060ff52
+- git:
+    local-name: brisk
+    uri: git@github.com:LXYYY/ethzasl_brisk.git
+- git: 
+    local-name: aslam_cv2
+    uri: git@github.com:LXYYY/aslam_cv2.git
+    version: devel/noetic
+- git:
+    local-name: doxygen_catkin
+    uri: git@github.com:ethz-asl/doxygen_catkin.git
+- git:
+    local-name: yaml_cpp_catkin
+    uri: git@github.com:ethz-asl/yaml_cpp_catkin.git
+- git:
+    local-name: opengv
+    uri: git@github.com:ethz-asl/opengv.git
+- git:
+    local-name: geodetic_utils
+    uri: git@github.com:ethz-asl/geodetic_utils.git
+- git:
+    local-name: robopt_open
+    uri: git@github.com:VIS4ROB-lab/robopt_open.git
+- git: 
+    local-name: ethzasl_apriltag2
+    uri: git@github.com:ethz-asl/ethzasl_apriltag2.git
+- git: 
+    local-name: opencv3_catkin
+    uri: git@github.com:LXYYY/opencv3_catkin.git
+    version: feature/system_opencv
 
